@@ -28,7 +28,7 @@ class Settings extends Component{
     render(){
         return(
             <div className="bg-img h-100">
-                 <PageNav match={this.props.match} user={this.props.user}/>
+                 <PageNav history={this.props.history} user={this.props.user}/>
                 <div style={{height:"calc(100% - 60px)", overflow:"auto"}}>
                     <Container className="my-4 bg-light-gradient rounded-lg shadow-sharpe p-5">
                         <Row className="m-0 mb-4 align-items-center">

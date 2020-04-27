@@ -15,11 +15,17 @@ import {
   Container,
   Button
 } from 'reactstrap';
+import {Link, withRouter} from "react-router-dom";
 import MenuDropdown from '../menu/MenuDropdown';
-import UserDropdown from '../menu/UserDropdown'
+import UserDropdown from '../menu/UserDropdown';
 
-export default
+
 class Header extends React.Component{
+
+    constructor(props){
+        super(props);
+       
+    }
 
     render(){
         return(
@@ -31,7 +37,7 @@ class Header extends React.Component{
                             code<span className="">me</span>
                         </NavbarBrand>
                         {this.props.user !== undefined ?
-                            <UserDropdown match={this.props.match} className="ml-auto" username={this.props.user.username}/>
+                            <UserDropdown history={this.props.history} className="ml-auto" username={this.props.user.username}/>
                         :null}
                     </Container>
 
@@ -40,6 +46,8 @@ class Header extends React.Component{
         );
     }
 }
+
+export default withRouter(Header);
 
 
 

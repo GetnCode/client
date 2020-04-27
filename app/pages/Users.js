@@ -424,7 +424,7 @@ class Users extends Component{
     render(){
         console.log(this.state);
         return (
-            <Page match={this.props.match} user={this.props.user}>
+            <Page history={this.props.history} user={this.props.user}>
                 <Container className="my-4 bg-light-gradient rounded-lg shadow-sharpe p-3 p-lg-5">
                     {this.state.successMessage !== null ? 
                         <UncontrolledAlert color="success">{this.state.successMessage}</UncontrolledAlert>

@@ -6,13 +6,13 @@ import {
     Button,
     Input
 } from 'reactstrap';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import PageNav from "../components/page/Header";
 import AppLink from "../components/global/AppLink";
 import Search from "../components/global/Search";
 import PageTitle from "../components/page/PageTitle";
 
-export default
+
 class Dashboard extends Component{
 
     constructor(props){
@@ -27,7 +27,7 @@ class Dashboard extends Component{
     render(){
         return(
             <div className="bg-img h-100">
-                <PageNav match={this.props.match} user={this.props.user}/>
+                <PageNav history={this.props.history} user={this.props.user}/>
                 <div style={{height:"calc(100% - 60px)", overflow:"auto"}}>
                     <Container className="my-4 bg-light-gradient shadow-sharpe p-5 rounded">
                         <Row className="m-0 align-items-center p-0 mb-4">
@@ -104,3 +104,5 @@ class Dashboard extends Component{
         );
     }
 }
+
+export default withRouter(Dashboard);

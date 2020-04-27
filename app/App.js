@@ -28,21 +28,27 @@ class App extends React.Component{
             user:{},
             isAuthorized:false,
             loading:true,
+            token:sessionStorage.getItem('token'),
+            id:sessionStorage.getItem('id')
         };
 
         this.setUser = this.setUser.bind(this);
     }
 
+    componentDidUpdate(){
+        console.log(this.state.token);
+    }
 
     componentDidMount(){
-        if( sessionStorage.getItem('token') === null){
+       //rebuild state after refresh
+        if( this.state.token === null){
             this.props.history.push("/login");
         }
         else{
             var um = new UserModel();
             um.getById(
-                sessionStorage.getItem('id'), 
-                sessionStorage.getItem('token')
+                this.state.id, 
+                this.state.token 
             ).then(response => {
                 this.setState({
                     user:response,
@@ -56,7 +62,7 @@ class App extends React.Component{
     setUser(user){
         sessionStorage.setItem('token', user.token);
         sessionStorage.setItem('id', user.id);
-        this.setState({user:user, isAuthorized:true});
+        this.setState({user:user, isAuthorized:true, token:user.token, id:user.id});
     }
 
     render(){

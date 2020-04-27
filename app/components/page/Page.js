@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Header from "./Header";
+import {Link, withRouter} from "react-router-dom";
 
-export default
 class Page extends React.Component{
     constructor(props){
         super(props);
@@ -12,7 +12,7 @@ class Page extends React.Component{
     render(){
         return( 
             <div className="bg-img h-100">
-                <Header match={this.props.match} user={this.props.user}/>
+                <Header history={this.props.history} user={this.props.user}/>
                 <div style={{height: "calc(100% - 60px)", overflow:"auto"}}>
                     {this.props.children}
                 </div>
@@ -20,3 +20,5 @@ class Page extends React.Component{
         );
     }
 }
+
+export default withRouter(Page)

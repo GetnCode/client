@@ -1,9 +1,9 @@
 import React from 'react';
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import Menu from "../../objects/Menu";
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 
-export default
+ 
 
 class UserDropdown extends React.Component {
 
@@ -13,9 +13,10 @@ class UserDropdown extends React.Component {
     }
 
     logout(){
-        console.log(this.props);
+        console.log(this.props.history);
+        sessionStorage.removeItem('id');
         sessionStorage.removeItem('token');
-        this.props.match.history.push("/login");
+        this.props.history.push({pathname:"/login"});
     }
 
     render(){
@@ -41,3 +42,4 @@ class UserDropdown extends React.Component {
     }
 
 }
+export default withRouter(UserDropdown)
