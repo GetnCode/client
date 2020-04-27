@@ -21,15 +21,13 @@ class Dashboard extends Component{
     }
 
     componentDidMount(){
-        if(!this.props.isAuthed){
-            console.log(this.props);
-        }
+      
     }
 
     render(){
         return(
             <div className="bg-img h-100">
-                <PageNav match={this.props.match}/>
+                <PageNav match={this.props.match} user={this.props.user}/>
                 <div style={{height:"calc(100% - 60px)", overflow:"auto"}}>
                     <Container className="my-4 bg-light-gradient shadow-sharpe p-5 rounded">
                         <Row className="m-0 align-items-center p-0 mb-4">

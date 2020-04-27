@@ -8,36 +8,59 @@
         <script src="https://kit.fontawesome.com/df9c50c276.js" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="/css/style.css"/>
+       
     </head>
     <body>
         <div id="app" class="h-100" >
-            <div class="row m-0 loading-animation h-100 align-items-center text-center justify-content-center">
-                <div>
-                    <h4 class="text-white">Loading Page...</h4>
-                    <div class="row m-0 loading-animation h-100 align-items-start justify-content-center">
-                        <div class="spinner-grow text-primary" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <div class="spinner-grow text-primary" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <div class="spinner-grow text-primary" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <div class="spinner-grow text-primary" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <div class="spinner-grow text-primary" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <div class="spinner-grow text-primary" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
+           
+        </div>
+       
+        <div class="w-100 row m-0 bg-white loading-animation h-100 align-items-center text-center justify-content-center">
+            <div>
+                <h4>LOADING</h4>
+                <div class="row m-0 h-100 align-items-start justify-content-center">
+                    <div class="spinner-grow text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="spinner-grow text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="spinner-grow text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="spinner-grow text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="spinner-grow text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <div class="spinner-grow text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
                     </div>
                 </div>
-
             </div>
+
         </div>
+        <script>
+            window.onload = () => {
+               var l = document.querySelector('.loading-animation');
+
+               var fadeEffect = setInterval(function () {
+                    if (!l.style.opacity) {
+                        l.style.opacity = 1;
+                    }
+                    if (l.style.opacity > 0) {
+                        l.style.opacity -= 0.1;
+                    } else {
+                        clearInterval(fadeEffect);
+                        l.style.display="none";
+                    }
+                }, 70);
+
+               
+            }
+           
+       </script>
         <script src="/js/index.js"></script>
     </body>
 </html>

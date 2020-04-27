@@ -12,7 +12,7 @@ class Page extends React.Component{
     render(){
         return( 
             <div className="bg-img h-100">
-                <Header match={this.props.match}/>
+                <Header match={this.props.match} user={this.props.user}/>
                 <div style={{height: "calc(100% - 60px)", overflow:"auto"}}>
                     {this.props.children}
                 </div>

@@ -4,11 +4,11 @@ export default
 class AuthModel{
 
     constructor(){
-        this.fetchable = new Fetchable("http://codemeserver/api/user");
+        this.fetchable = new Fetchable("http://codemeserver/user");
     }
 
     async isAuthorized(token){
-        return this.fetchable.post("/authorized", {token:token});
+        return this.fetchable.get("/authorized", {token:token});
     }
 
     async authorize(attempt){

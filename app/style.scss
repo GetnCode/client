@@ -33,11 +33,11 @@ $navbar-light-active-color:         rgba($secondary, .9) !default;
 $lightGradient: linear-gradient(#fff, #f5f5f5);
 $darkGradient: linear-gradient(#1b1b1b, #141414);
 
-
+/*
 $border-radius:               0 !default;
 $border-radius-lg:            0 !default;
 $border-radius-sm:            0 !default;
-
+*/
 
 $input-bg:                              #fff !default;
 $input-disabled-bg:                     #ccc !default;
@@ -71,7 +71,14 @@ $pagination-disabled-border-color:  #ddd !default;
 @import "~bootstrap/scss/bootstrap";
 
 
-
+.loading-animation{
+    height: 100%;
+    width: 100%;
+    z-index: 9999;
+    position: fixed;
+    top:0;
+    left:0;
+}
 
 html,body{
     height: 100%;

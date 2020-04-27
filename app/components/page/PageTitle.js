@@ -13,7 +13,7 @@ class PageTitle extends React.Component{
         return(
             <div className="mr-5 p-0">
                 <Link className="" to={this.props.path}>
-                    <h4 className="m-0 font-weight-bold text-primary">{this.props.title}</h4>
+                    <h3 className="m-0 font-weight-bold text-primary">{this.props.title}</h3>
                     <p className="m-0 small text-muted">{this.props.description}</p>
                 </Link>
 

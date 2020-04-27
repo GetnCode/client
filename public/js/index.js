@@ -105,6 +105,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_Users__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/Users */ "./app/pages/Users.js");
 /* harmony import */ var _pages_Login__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/Login */ "./app/pages/Login.js");
 /* harmony import */ var _objects_AuthModel__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./objects/AuthModel */ "./app/objects/AuthModel.js");
+/* harmony import */ var _objects_User__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./objects/User */ "./app/objects/User.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -138,6 +139,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
 var App = /*#__PURE__*/function (_React$Component) {
   _inherits(App, _React$Component);
 
@@ -151,10 +153,10 @@ var App = /*#__PURE__*/function (_React$Component) {
     _this = _super.call(this, props);
     _this.state = {
       user: {},
-      isAuthorized: false
+      isAuthorized: false,
+      loading: true
     };
     _this.setUser = _this.setUser.bind(_assertThisInitialized(_this));
-    console.log(_this.state);
     return _this;
   }
 
@@ -163,11 +165,14 @@ var App = /*#__PURE__*/function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      if (this.state.user.token !== undefined) {
-        var am = new _objects_AuthModel__WEBPACK_IMPORTED_MODULE_7__["default"]();
-        am.isAuthorized(this.state.user.token).then(function (authed) {
+      if (sessionStorage.getItem('token') === null) {
+        this.props.history.push("/login");
+      } else {
+        var um = new _objects_User__WEBPACK_IMPORTED_MODULE_8__["default"]();
+        um.getById(sessionStorage.getItem('id'), sessionStorage.getItem('token')).then(function (response) {
           _this2.setState({
-            isAuthorized: authed[0]
+            user: response,
+            isAuthorized: true
           });
         });
       }
@@ -175,10 +180,11 @@ var App = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "setUser",
     value: function setUser(user) {
-      console.log("settings user");
-      console.log(user);
+      sessionStorage.setItem('token', user.token);
+      sessionStorage.setItem('id', user.id);
       this.setState({
-        user: user
+        user: user,
+        isAuthorized: true
       });
     }
   }, {
@@ -828,7 +834,6 @@ var Search = /*#__PURE__*/function (_React$Component) {
         className: "col row m-0 p-0",
         onSubmit: this.onSubmit
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-        bsSize: "sm",
         className: "col mr-1 ",
         type: "search",
         name: "search",
@@ -836,16 +841,14 @@ var Search = /*#__PURE__*/function (_React$Component) {
         value: this.state.term,
         placeholder: "Search..."
       }), !this.state.searched ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-        size: "sm",
-        className: "px-2",
+        className: "px-3",
         color: "primary",
         type: "submit"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fa fas fa-search"
       })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-        size: "sm",
         onClick: this.clearSearch,
-        className: "px-2",
+        className: "px-3",
         color: "primary",
         type: "button"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
@@ -989,20 +992,21 @@ var MenuDropdown = /*#__PURE__*/function (_React$Component) {
 
 /***/ }),
 
-/***/ "./app/components/page/Header.js":
-/*!***************************************!*\
-  !*** ./app/components/page/Header.js ***!
-  \***************************************/
+/***/ "./app/components/menu/UserDropdown.js":
+/*!*********************************************!*\
+  !*** ./app/components/menu/UserDropdown.js ***!
+  \*********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Header; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UserDropdown; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/index.js");
-/* harmony import */ var _menu_MenuDropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../menu/MenuDropdown */ "./app/components/menu/MenuDropdown.js");
+/* harmony import */ var _objects_Menu__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../objects/Menu */ "./app/objects/Menu.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1024,6 +1028,112 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
+var UserDropdown = /*#__PURE__*/function (_React$Component) {
+  _inherits(UserDropdown, _React$Component);
+
+  var _super = _createSuper(UserDropdown);
+
+  function UserDropdown(props) {
+    var _this;
+
+    _classCallCheck(this, UserDropdown);
+
+    _this = _super.call(this, props);
+    _this.logout = _this.logout.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(UserDropdown, [{
+    key: "logout",
+    value: function logout() {
+      console.log(this.props);
+      sessionStorage.removeItem('token');
+      this.props.match.history.push("/login");
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["UncontrolledDropdown"], {
+        className: this.props.className
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownToggle"], {
+        className: "text-white d-flex align-items-center",
+        size: "sm",
+        color: "link",
+        caret: true
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fas fa-user-circle mr-2 fa-2x"
+      }), " ", this.props.username), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["DropdownMenu"], {
+        className: "bg-white border-left border-top border-right shadow p-4",
+        right: true
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        style: {
+          width: "200px",
+          borderRadius: "0.25rem"
+        }
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+        className: "d-block border-bottom w-100 p-3 small",
+        to: "/account"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fas fa-user mr-2"
+      }), " Account"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+        className: "d-block w-100 p-3 small",
+        onClick: this.logout
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fas fa-sign-out-alt mr-2"
+      }), " Logout"))));
+    }
+  }]);
+
+  return UserDropdown;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./app/components/page/Header.js":
+/*!***************************************!*\
+  !*** ./app/components/page/Header.js ***!
+  \***************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Header; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/index.js");
+/* harmony import */ var _menu_MenuDropdown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../menu/MenuDropdown */ "./app/components/menu/MenuDropdown.js");
+/* harmony import */ var _menu_UserDropdown__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../menu/UserDropdown */ "./app/components/menu/UserDropdown.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -1053,7 +1163,11 @@ var Header = /*#__PURE__*/function (_React$Component) {
         className: "text-white font-weight-bold ml-3"
       }, "code", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
         className: ""
-      }, "me")))));
+      }, "me")), this.props.user !== undefined ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_menu_UserDropdown__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        match: this.props.match,
+        className: "ml-auto",
+        username: this.props.user.username
+      }) : null)));
     }
   }]);
 
@@ -1123,7 +1237,8 @@ var Page = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "bg-img h-100"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Header__WEBPACK_IMPORTED_MODULE_1__["default"], {
-        match: this.props.match
+        match: this.props.match,
+        user: this.props.user
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
           height: "calc(100% - 60px)",
@@ -1196,7 +1311,7 @@ var PageTitle = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
         className: "",
         to: this.props.path
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
         className: "m-0 font-weight-bold text-primary"
       }, this.props.title), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
         className: "m-0 small text-muted"
@@ -1273,7 +1388,7 @@ var UserCreateModal = /*#__PURE__*/function (_React$Component) {
         isOpen: this.props.isOpen,
         toggle: this.props.toggle
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["ModalBody"], {
-        className: "bg-white p-5 shadow"
+        className: "bg-white p-5 shadow rounded"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: " row m-0 align-items-center  mb-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -1292,6 +1407,101 @@ var UserCreateModal = /*#__PURE__*/function (_React$Component) {
   }]);
 
   return UserCreateModal;
+}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+
+
+
+/***/ }),
+
+/***/ "./app/components/user/UserDeleteModal.js":
+/*!************************************************!*\
+  !*** ./app/components/user/UserDeleteModal.js ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UserDeleteModal; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var reactstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! reactstrap */ "./node_modules/reactstrap/es/index.js");
+/* harmony import */ var _UserForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./UserForm */ "./app/components/user/UserForm.js");
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _createSuper(Derived) { return function () { var Super = _getPrototypeOf(Derived), result; if (_isNativeReflectConstruct()) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+var UserDeleteModal = /*#__PURE__*/function (_React$Component) {
+  _inherits(UserDeleteModal, _React$Component);
+
+  var _super = _createSuper(UserDeleteModal);
+
+  function UserDeleteModal(props) {
+    var _this;
+
+    _classCallCheck(this, UserDeleteModal);
+
+    _this = _super.call(this, props);
+    _this.state = {};
+    return _this;
+  }
+
+  _createClass(UserDeleteModal, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Modal"], {
+        isOpen: this.props.isOpen,
+        toggle: this.props.toggle
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["ModalBody"], {
+        className: "bg-white rounded p-5 shadow"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: " row m-0 align-items-center  mb-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
+        className: "font-weight-bold mb-0 text-primary"
+      }, "Are you sure?"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+        color: "secondary",
+        className: "ml-auto",
+        size: "sm",
+        onClick: this.props.toggle
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fas fa-times"
+      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "p-4 border bg-light rounded mb-4"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", {
+        className: "small text-muted m-0"
+      }, "If you delete this user they will not be able to be recovered.")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+        block: true,
+        className: "py-2",
+        size: "sm",
+        color: "primary",
+        onClick: this.props.onClick
+      }, "Delete User")));
+    }
+  }]);
+
+  return UserDeleteModal;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 
@@ -1360,7 +1570,7 @@ var UserEditModal = /*#__PURE__*/function (_React$Component) {
         isOpen: this.props.isOpen,
         toggle: this.props.toggle
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["ModalBody"], {
-        className: "bg-white p-5 shadow"
+        className: "bg-white rounded p-5 shadow"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: " row m-0 align-items-center  mb-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h5", {
@@ -1373,7 +1583,6 @@ var UserEditModal = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fa fas fa-times"
       }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_UserForm__WEBPACK_IMPORTED_MODULE_2__["default"], {
-        btnLabel: "Edit User",
         permission: this.props.permission,
         username: this.props.username,
         email: this.props.email,
@@ -1671,6 +1880,7 @@ var Fetchable = /*#__PURE__*/function () {
     value: function () {
       var _get = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         var url,
+            token,
             response,
             _args = arguments;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
@@ -1678,18 +1888,26 @@ var Fetchable = /*#__PURE__*/function () {
             switch (_context.prev = _context.next) {
               case 0:
                 url = _args.length > 0 && _args[0] !== undefined ? _args[0] : '';
-                _context.next = 3;
+                token = _args.length > 1 ? _args[1] : undefined;
+
+                if (url.includes("?")) {
+                  url += "&api_token=" + token;
+                } else {
+                  url += "?api_token=" + token;
+                }
+
+                _context.next = 5;
                 return fetch(this.baseUrl + url);
 
-              case 3:
+              case 5:
                 response = _context.sent;
-                _context.next = 6;
+                _context.next = 8;
                 return response.json();
 
-              case 6:
+              case 8:
                 return _context.abrupt("return", _context.sent);
 
-              case 7:
+              case 9:
               case "end":
                 return _context.stop();
             }
@@ -1709,6 +1927,7 @@ var Fetchable = /*#__PURE__*/function () {
       var _post = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
         var url,
             data,
+            token,
             response,
             _args2 = arguments;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
@@ -1717,7 +1936,8 @@ var Fetchable = /*#__PURE__*/function () {
               case 0:
                 url = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : '';
                 data = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : {};
-                _context2.next = 4;
+                token = _args2.length > 2 ? _args2[2] : undefined;
+                _context2.next = 5;
                 return fetch(this.baseUrl + url, {
                   method: 'POST',
                   // *GET, POST, PUT, DELETE, etc.
@@ -1728,7 +1948,9 @@ var Fetchable = /*#__PURE__*/function () {
                   credentials: 'same-origin',
                   // include, *same-origin, omit
                   headers: {
-                    'Content-Type': 'application/json' // 'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': 'Bearer '.token,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json' // 'Content-Type': 'application/x-www-form-urlencoded',
 
                   },
                   redirect: 'follow',
@@ -1739,15 +1961,15 @@ var Fetchable = /*#__PURE__*/function () {
 
                 });
 
-              case 4:
+              case 5:
                 response = _context2.sent;
-                _context2.next = 7;
+                _context2.next = 8;
                 return response.json();
 
-              case 7:
+              case 8:
                 return _context2.abrupt("return", _context2.sent);
 
-              case 8:
+              case 9:
               case "end":
                 return _context2.stop();
             }
@@ -1876,7 +2098,7 @@ var AuthModel = /*#__PURE__*/function () {
   function AuthModel() {
     _classCallCheck(this, AuthModel);
 
-    this.fetchable = new _library_Fetchable__WEBPACK_IMPORTED_MODULE_1__["default"]("http://codemeserver/api/user");
+    this.fetchable = new _library_Fetchable__WEBPACK_IMPORTED_MODULE_1__["default"]("http://codemeserver/user");
   }
 
   _createClass(AuthModel, [{
@@ -1887,7 +2109,7 @@ var AuthModel = /*#__PURE__*/function () {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt("return", this.fetchable.post("/authorized", {
+                return _context.abrupt("return", this.fetchable.get("/authorized", {
                   token: token
                 }));
 
@@ -2281,12 +2503,12 @@ var User = /*#__PURE__*/function () {
   _createClass(User, [{
     key: "save",
     value: function () {
-      var _save = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(siteObject) {
+      var _save = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(siteObject, token) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                return _context.abrupt("return", this.fetchable.post("/create", siteObject));
+                return _context.abrupt("return", this.fetchable.post("/create", siteObject, token));
 
               case 1:
               case "end":
@@ -2296,7 +2518,7 @@ var User = /*#__PURE__*/function () {
         }, _callee, this);
       }));
 
-      function save(_x) {
+      function save(_x, _x2) {
         return _save.apply(this, arguments);
       }
 
@@ -2305,14 +2527,14 @@ var User = /*#__PURE__*/function () {
   }, {
     key: "delete",
     value: function () {
-      var _delete2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(id) {
+      var _delete2 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(id, token) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 return _context2.abrupt("return", this.fetchable.post("/delete", {
                   "id": id
-                }));
+                }, token));
 
               case 1:
               case "end":
@@ -2322,7 +2544,7 @@ var User = /*#__PURE__*/function () {
         }, _callee2, this);
       }));
 
-      function _delete(_x2) {
+      function _delete(_x3, _x4) {
         return _delete2.apply(this, arguments);
       }
 
@@ -2331,14 +2553,14 @@ var User = /*#__PURE__*/function () {
   }, {
     key: "deleteAll",
     value: function () {
-      var _deleteAll = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(excluded) {
+      var _deleteAll = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(excluded, token) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
                 return _context3.abrupt("return", this.fetchable.post("/delete/all", {
                   "excluded": excluded
-                }));
+                }, token));
 
               case 1:
               case "end":
@@ -2348,21 +2570,23 @@ var User = /*#__PURE__*/function () {
         }, _callee3, this);
       }));
 
-      function deleteAll(_x3) {
+      function deleteAll(_x5, _x6) {
         return _deleteAll.apply(this, arguments);
       }
 
       return deleteAll;
     }()
   }, {
-    key: "update",
+    key: "deleteSelected",
     value: function () {
-      var _update = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(siteObject) {
+      var _deleteSelected = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(selected, token) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                return _context4.abrupt("return", this.fetchable.post("/update", siteObject));
+                return _context4.abrupt("return", this.fetchable.post("/delete/selected", {
+                  "selected": selected
+                }, token));
 
               case 1:
               case "end":
@@ -2372,21 +2596,21 @@ var User = /*#__PURE__*/function () {
         }, _callee4, this);
       }));
 
-      function update(_x4) {
-        return _update.apply(this, arguments);
+      function deleteSelected(_x7, _x8) {
+        return _deleteSelected.apply(this, arguments);
       }
 
-      return update;
+      return deleteSelected;
     }()
   }, {
-    key: "getById",
+    key: "update",
     value: function () {
-      var _getById = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5(id) {
+      var _update = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5(siteObject, token) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                return _context5.abrupt("return", this.fetchable.get("/id/" + id));
+                return _context5.abrupt("return", this.fetchable.post("/update", siteObject, token));
 
               case 1:
               case "end":
@@ -2396,21 +2620,21 @@ var User = /*#__PURE__*/function () {
         }, _callee5, this);
       }));
 
-      function getById(_x5) {
-        return _getById.apply(this, arguments);
+      function update(_x9, _x10) {
+        return _update.apply(this, arguments);
       }
 
-      return getById;
+      return update;
     }()
   }, {
-    key: "getAll",
+    key: "getById",
     value: function () {
-      var _getAll = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+      var _getById = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6(id, token) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                return _context6.abrupt("return", this.fetchable.get("/all"));
+                return _context6.abrupt("return", this.fetchable.get("/id/" + id, token));
 
               case 1:
               case "end":
@@ -2420,7 +2644,31 @@ var User = /*#__PURE__*/function () {
         }, _callee6, this);
       }));
 
-      function getAll() {
+      function getById(_x11, _x12) {
+        return _getById.apply(this, arguments);
+      }
+
+      return getById;
+    }()
+  }, {
+    key: "getAll",
+    value: function () {
+      var _getAll = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7(token) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
+          while (1) {
+            switch (_context7.prev = _context7.next) {
+              case 0:
+                return _context7.abrupt("return", this.fetchable.get("/all", token));
+
+              case 1:
+              case "end":
+                return _context7.stop();
+            }
+          }
+        }, _callee7, this);
+      }));
+
+      function getAll(_x13) {
         return _getAll.apply(this, arguments);
       }
 
@@ -2429,38 +2677,41 @@ var User = /*#__PURE__*/function () {
   }, {
     key: "getPage",
     value: function () {
-      var _getPage = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7(page) {
+      var _getPage = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(page) {
         var show,
             sortBy,
             sortDirecton,
-            _args7 = arguments;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
+            token,
+            _args8 = arguments;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context7.prev = _context7.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
-                show = _args7.length > 1 && _args7[1] !== undefined ? _args7[1] : 10;
-                sortBy = _args7.length > 2 && _args7[2] !== undefined ? _args7[2] : null;
-                sortDirecton = _args7.length > 3 && _args7[3] !== undefined ? _args7[3] : null;
+                show = _args8.length > 1 && _args8[1] !== undefined ? _args8[1] : 10;
+                sortBy = _args8.length > 2 && _args8[2] !== undefined ? _args8[2] : null;
+                sortDirecton = _args8.length > 3 && _args8[3] !== undefined ? _args8[3] : null;
+                token = _args8.length > 4 ? _args8[4] : undefined;
+                console.log(token);
 
                 if (!(sortBy !== null)) {
-                  _context7.next = 7;
+                  _context8.next = 9;
                   break;
                 }
 
-                return _context7.abrupt("return", this.fetchable.get("/page?page=" + page + "&show=" + show + "&sort=" + sortBy + "&direction=" + sortDirecton));
+                return _context8.abrupt("return", this.fetchable.get("/page?page=" + page + "&show=" + show + "&sort=" + sortBy + "&direction=" + sortDirecton, token));
 
-              case 7:
-                return _context7.abrupt("return", this.fetchable.get("/page?page=" + page + "&show=" + show + "&sort=users.created_at&direction=desc"));
+              case 9:
+                return _context8.abrupt("return", this.fetchable.get("/page?page=" + page + "&show=" + show + "&sort=users.created_at&direction=desc", token));
 
-              case 8:
+              case 10:
               case "end":
-                return _context7.stop();
+                return _context8.stop();
             }
           }
-        }, _callee7, this);
+        }, _callee8, this);
       }));
 
-      function getPage(_x6) {
+      function getPage(_x14) {
         return _getPage.apply(this, arguments);
       }
 
@@ -2469,22 +2720,22 @@ var User = /*#__PURE__*/function () {
   }, {
     key: "search",
     value: function () {
-      var _search = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(term) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
+      var _search = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9(term, token) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
           while (1) {
-            switch (_context8.prev = _context8.next) {
+            switch (_context9.prev = _context9.next) {
               case 0:
-                return _context8.abrupt("return", this.fetchable.get("/search/" + term));
+                return _context9.abrupt("return", this.fetchable.get("/search/" + term, token));
 
               case 1:
               case "end":
-                return _context8.stop();
+                return _context9.stop();
             }
           }
-        }, _callee8, this);
+        }, _callee9, this);
       }));
 
-      function search(_x7) {
+      function search(_x15, _x16) {
         return _search.apply(this, arguments);
       }
 
@@ -2560,18 +2811,15 @@ var Dashboard = /*#__PURE__*/function (_Component) {
 
   _createClass(Dashboard, [{
     key: "componentDidMount",
-    value: function componentDidMount() {
-      if (!this.props.isAuthed) {
-        console.log(this.props);
-      }
-    }
+    value: function componentDidMount() {}
   }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "bg-img h-100"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_page_Header__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        match: this.props.match
+        match: this.props.match,
+        user: this.props.user
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
           height: "calc(100% - 60px)",
@@ -2980,21 +3228,25 @@ var Settings = /*#__PURE__*/function (_Component) {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "bg-img h-100"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_page_Header__WEBPACK_IMPORTED_MODULE_4__["default"], {
-        match: this.props.match
+        match: this.props.match,
+        user: this.props.user
       }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
           height: "calc(100% - 60px)",
           overflow: "auto"
         }
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
-        className: "my-4 bg-light-gradient shadow-sharpe p-5"
+        className: "my-4 bg-light-gradient rounded-lg shadow-sharpe p-5"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Row"], {
-        className: "m-0 mb-4"
+        className: "m-0 mb-4 align-items-center"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
         className: "btn btn-primary btn-sm mr-3",
         to: "/"
-      }, "Back"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_page_PageTitle__WEBPACK_IMPORTED_MODULE_3__["default"], {
-        title: "Settings"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fas fa-angle-left mr-1"
+      }), " Back"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_page_PageTitle__WEBPACK_IMPORTED_MODULE_3__["default"], {
+        title: "Settings",
+        description: "Configure and set user, roles, views configuration & more"
       })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Row"], {
         className: "m-0 align-items-center   mt-4"
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Col"], {
@@ -3046,6 +3298,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_page_Page__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../components/page/Page */ "./app/components/page/Page.js");
 /* harmony import */ var _components_user_UserEditModal__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../components/user/UserEditModal */ "./app/components/user/UserEditModal.js");
 /* harmony import */ var _components_user_UserCreateModal__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../components/user/UserCreateModal */ "./app/components/user/UserCreateModal.js");
+/* harmony import */ var _components_user_UserDeleteModal__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../components/user/UserDeleteModal */ "./app/components/user/UserDeleteModal.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -3067,6 +3320,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -3140,8 +3394,12 @@ var Users = /*#__PURE__*/function (_Component) {
     _this.onSelectRow = _this.onSelectRow.bind(_assertThisInitialized(_this));
     _this.save = _this.save.bind(_assertThisInitialized(_this));
     _this.update = _this.update.bind(_assertThisInitialized(_this));
+    _this["delete"] = _this["delete"].bind(_assertThisInitialized(_this));
+    _this.deleteAll = _this.deleteAll.bind(_assertThisInitialized(_this));
     _this.toggleCreateModal = _this.toggleCreateModal.bind(_assertThisInitialized(_this));
     _this.toggleEditModal = _this.toggleEditModal.bind(_assertThisInitialized(_this));
+    _this.toggleDeleteModal = _this.toggleDeleteModal.bind(_assertThisInitialized(_this));
+    _this.toggleDeleteSelectedModal = _this.toggleDeleteSelectedModal.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -3167,6 +3425,8 @@ var Users = /*#__PURE__*/function (_Component) {
     value: function load() {
       var _this2 = this;
 
+      console.log(sessionStorage.getItem('token'));
+
       if (this.state.loading === false) {
         this.setState({
           loading: true
@@ -3175,7 +3435,7 @@ var Users = /*#__PURE__*/function (_Component) {
 
       var s = new URLSearchParams(window.location.search);
       var page = s.get('page') == null ? 1 : s.get('page');
-      model.getPage(page, this.state.perPage, this.state.sortBy, this.state.sortDirection === null ? "desc" : this.state.sortDirection).then(function (data) {
+      model.getPage(page, this.state.perPage, this.state.sortBy, this.state.sortDirection === null ? "desc" : this.state.sortDirection, sessionStorage.getItem('token')).then(function (data) {
         var selectedRows = _this2.state.selectedRows;
 
         if (_this2.state.selectAllRows) {
@@ -3202,7 +3462,7 @@ var Users = /*#__PURE__*/function (_Component) {
     value: function loadPermissions() {
       var _this3 = this;
 
-      permissionModel.getAll().then(function (data) {
+      permissionModel.getAll(sessionStorage.getItem('token')).then(function (data) {
         _this3.setState({
           permissions: data
         });
@@ -3249,16 +3509,29 @@ var Users = /*#__PURE__*/function (_Component) {
         this.state.items.map(function (item) {
           selectedRows.push(item.id);
         });
-        this.setState({
-          selectedRows: selectedRows,
-          selectAllRows: true,
-          showDeleteSelectedBtn: true
-        });
+
+        if (selectedRows.length > 1) {
+          this.setState({
+            selectedRows: selectedRows,
+            selectAllRows: true,
+            showDeleteSelectedBtn: true
+          });
+        } else {
+          this.setState({
+            selectedRows: selectedRows,
+            selectAllRows: true,
+            showDeleteSelectedBtn: false,
+            showEditBtn: true,
+            showDeleteBtn: true
+          });
+        }
       } else {
         this.setState({
           selectedRows: [],
           selectAllRows: false,
-          showDeleteSelectedBtn: false
+          showDeleteSelectedBtn: false,
+          showEditBtn: false,
+          showDeleteBtn: false
         });
       }
     }
@@ -3335,11 +3608,25 @@ var Users = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
+    key: "toggleDeleteModal",
+    value: function toggleDeleteModal() {
+      this.setState({
+        deleteModalOpen: this.state.deleteModalOpen ? false : true
+      });
+    }
+  }, {
+    key: "toggleDeleteSelectedModal",
+    value: function toggleDeleteSelectedModal() {
+      this.setState({
+        deleteSelectedModalOpen: this.state.deleteSelectedModalOpen ? false : true
+      });
+    }
+  }, {
     key: "save",
     value: function save(user) {
       var _this7 = this;
 
-      model.save(user).then(function (response) {
+      model.save(user, sessionStorage.getItem('token')).then(function (response) {
         if (response.id) {
           _this7.setState({
             successMessage: "Successfully created user",
@@ -3356,7 +3643,7 @@ var Users = /*#__PURE__*/function (_Component) {
       var _this8 = this;
 
       user.id = this.state.selectedRows[0];
-      model.update(user).then(function (response) {
+      model.update(user, sessionStorage.getItem('token')).then(function (response) {
         if (response.id) {
           _this8.setState({
             successMessage: "Successfully updated user",
@@ -3369,10 +3656,63 @@ var Users = /*#__PURE__*/function (_Component) {
       });
     }
   }, {
+    key: "delete",
+    value: function _delete(e) {
+      var _this9 = this;
+
+      model["delete"](this.state.selectedRows[0], sessionStorage.getItem('token')).then(function (response) {
+        if (response.status === 'success') {
+          _this9.setState({
+            successMessage: "Successfully deleted user",
+            deleteModalOpen: false,
+            selectedRows: []
+          });
+
+          _this9.load();
+        }
+      });
+    }
+  }, {
+    key: "deleteAll",
+    value: function deleteAll(e) {
+      var _this10 = this;
+
+      if (this.state.selectAllRows) {
+        model.deleteAll(this.state.excludedRows, sessionStorage.getItem('token')).then(function (response) {
+          if (response.status === 'success') {
+            _this10.setState({
+              successMessage: "Successfully deleted all items except none selected items",
+              deleteSelectedModalOpen: false,
+              selectedRows: [],
+              excludedRows: []
+            });
+
+            _this10.load();
+          }
+        });
+      } else {
+        model.deleteSelected(this.state.selectedRows, sessionStorage.getItem('token')).then(function (response) {
+          if (response.status === 'success') {
+            _this10.setState({
+              successMessage: "Successfully deleted all selected",
+              deleteSelectedModalOpen: false,
+              selectedRows: []
+            });
+
+            _this10.load();
+          }
+        });
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_page_Page__WEBPACK_IMPORTED_MODULE_12__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
-        className: "my-4 bg-light-gradient shadow-sharpe p-3 p-lg-5"
+      console.log(this.state);
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_page_Page__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        match: this.props.match,
+        user: this.props.user
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Container"], {
+        className: "my-4 bg-light-gradient rounded-lg shadow-sharpe p-3 p-lg-5"
       }, this.state.successMessage !== null ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["UncontrolledAlert"], {
         color: "success"
       }, this.state.successMessage) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Row"], {
@@ -3408,7 +3748,7 @@ var Users = /*#__PURE__*/function (_Component) {
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
         className: "fa fas fa-pen mr-1"
       }), "Edit"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-        className: this.state.showDeleteBtn ? "" : "d-none",
+        className: this.state.showDeleteBtn ? "ml-2" : "d-none",
         color: "primary",
         size: "sm",
         onClick: this.toggleDeleteModal
@@ -3423,7 +3763,7 @@ var Users = /*#__PURE__*/function (_Component) {
         className: "fa fas fa-trash mr-1"
       }), "Delete")) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: ""
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_global_DataTable__WEBPACK_IMPORTED_MODULE_11__["default"], {
+      }, this.state.items.length ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_global_DataTable__WEBPACK_IMPORTED_MODULE_11__["default"], {
         loading: this.state.loading,
         selectedRows: this.state.selectedRows,
         selectAll: this.state.selectAllRows,
@@ -3442,7 +3782,17 @@ var Users = /*#__PURE__*/function (_Component) {
         sortBy: this.state.sortBy,
         sortDirection: this.state.sortDirection,
         page: "/users"
-      }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_user_UserCreateModal__WEBPACK_IMPORTED_MODULE_14__["default"], {
+      }) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Row"], {
+        className: "m-0"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Col"], {
+        xs: "12",
+        className: "p-3 border bg-light d-flex align-items-center"
+      }, "You have no records. ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(reactstrap__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+        color: "primary",
+        size: "sm",
+        className: "ml-auto",
+        onClick: this.toggleCreateModal
+      }, "Create User"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_user_UserCreateModal__WEBPACK_IMPORTED_MODULE_14__["default"], {
         isOpen: this.state.createModalOpen,
         toggle: this.toggleCreateModal,
         onSubmit: this.save
@@ -3453,6 +3803,14 @@ var Users = /*#__PURE__*/function (_Component) {
         isOpen: this.state.editModalOpen,
         toggle: this.toggleEditModal,
         onSubmit: this.update
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_user_UserDeleteModal__WEBPACK_IMPORTED_MODULE_15__["default"], {
+        isOpen: this.state.deleteModalOpen,
+        toggle: this.toggleDeleteModal,
+        onClick: this["delete"]
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_user_UserDeleteModal__WEBPACK_IMPORTED_MODULE_15__["default"], {
+        isOpen: this.state.deleteSelectedModalOpen,
+        toggle: this.toggleDeleteSelectedModal,
+        onClick: this.deleteAll
       }));
     }
   }]);

@@ -50,6 +50,7 @@ import DataTable from "../components/global/DataTable";
 import Page from "../components/page/Page";
 import UserEditModal from '../components/user/UserEditModal';
 import UserCreateModal from '../components/user/UserCreateModal';
+import UserDeleteModal from '../components/user/UserDeleteModal';
 
 var model = new User();
 var permissionModel = new PermissionModel();
@@ -101,14 +102,17 @@ class Users extends Component{
 
         this.save = this.save.bind(this);
         this.update = this.update.bind(this);
+        this.delete = this.delete.bind(this);
+        this.deleteAll = this.deleteAll.bind(this);
 
         this.toggleCreateModal = this.toggleCreateModal.bind(this);
         this.toggleEditModal = this.toggleEditModal.bind(this);
+        this.toggleDeleteModal = this.toggleDeleteModal.bind(this);
+        this.toggleDeleteSelectedModal = this.toggleDeleteSelectedModal.bind(this);
     }
 
     componentDidMount(){
         this.load();
-        
     }
 
     componentDidUpdate(){
@@ -124,7 +128,7 @@ class Users extends Component{
     }
 
     load(){
-        
+        console.log(sessionStorage.getItem('token'));
         if(this.state.loading === false){
             this.setState({loading:true});
         }
@@ -138,7 +142,8 @@ class Users extends Component{
             page, 
             this.state.perPage, 
             this.state.sortBy, 
-            this.state.sortDirection === null ? "desc":this.state.sortDirection
+            this.state.sortDirection === null ? "desc":this.state.sortDirection,
+            sessionStorage.getItem('token')
         ).then((data) => {
             var selectedRows = this.state.selectedRows;
           
@@ -163,7 +168,7 @@ class Users extends Component{
     }
 
     loadPermissions(){
-        permissionModel.getAll().then((data) => {
+        permissionModel.getAll(sessionStorage.getItem('token')).then((data) => {
             this.setState({
                 permissions:data
             });
@@ -220,11 +225,24 @@ class Users extends Component{
                 selectedRows.push(item.id);
             });
 
-            this.setState({
-                selectedRows:selectedRows,
-                selectAllRows:true,
-                showDeleteSelectedBtn:true,
-            });
+            if(selectedRows.length > 1){
+                this.setState({
+                    selectedRows:selectedRows,
+                    selectAllRows:true,
+                    showDeleteSelectedBtn:true,
+                });
+            }
+
+            else{
+                this.setState({
+                    selectedRows:selectedRows,
+                    selectAllRows:true,
+                    showDeleteSelectedBtn:false,
+                    showEditBtn:true,
+                    showDeleteBtn:true,
+                });
+            }
+           
         }
 
         else{
@@ -232,6 +250,8 @@ class Users extends Component{
                 selectedRows:[],
                 selectAllRows:false,
                 showDeleteSelectedBtn:false,
+                showEditBtn:false,
+                showDeleteBtn:false,
             });
         }
     }
@@ -313,8 +333,20 @@ class Users extends Component{
         
     }
 
+    toggleDeleteModal(){
+        this.setState({
+            deleteModalOpen: this.state.deleteModalOpen ? false:true
+        });
+    }
+
+    toggleDeleteSelectedModal(){
+        this.setState({
+            deleteSelectedModalOpen: this.state.deleteSelectedModalOpen ? false:true
+        });
+    }
+
     save(user){
-        model.save(user).then(response => {
+        model.save(user,  sessionStorage.getItem('token')).then(response => {
             if(response.id){
                 this.setState({
                     successMessage:"Successfully created user",
@@ -328,7 +360,7 @@ class Users extends Component{
 
     update(user){
         user.id = this.state.selectedRows[0];
-        model.update(user).then(response => {
+        model.update(user,  sessionStorage.getItem('token')).then(response => {
             if(response.id){
                 this.setState({
                     successMessage:"Successfully updated user",
@@ -341,11 +373,59 @@ class Users extends Component{
         });
     }
 
+    delete(e){
+        model.delete(this.state.selectedRows[0],  sessionStorage.getItem('token')).then(response => {
+           
+            if(response.status === 'success'){
+                this.setState({
+                    successMessage:"Successfully deleted user",
+                    deleteModalOpen:false,
+                    selectedRows:[]
+                });
+
+                this.load();
+            }
+        });
+    }
+
+    deleteAll(e){
+        if(this.state.selectAllRows){
+            
+            model.deleteAll(this.state.excludedRows,  sessionStorage.getItem('token')).then(response => {
+                if(response.status === 'success'){
+                    this.setState({
+                        successMessage:"Successfully deleted all items except none selected items",
+                        deleteSelectedModalOpen:false,
+                        selectedRows:[],
+                        excludedRows:[]
+                    });
+    
+                    this.load();
+                }
+            });
+        }
+
+        else{
+            model.deleteSelected(this.state.selectedRows,  sessionStorage.getItem('token')).then(response => {
+                if(response.status === 'success'){
+                    this.setState({
+                        successMessage:"Successfully deleted all selected",
+                        deleteSelectedModalOpen:false,
+                        selectedRows:[]
+                    });
+    
+                    this.load();
+                }
+            });
+        }
+       
+    }
+
     render(){
-        
+        console.log(this.state);
         return (
-            <Page>
-                <Container className="my-4 bg-light-gradient shadow-sharpe p-3 p-lg-5">
+            <Page match={this.props.match} user={this.props.user}>
+                <Container className="my-4 bg-light-gradient rounded-lg shadow-sharpe p-3 p-lg-5">
                     {this.state.successMessage !== null ? 
                         <UncontrolledAlert color="success">{this.state.successMessage}</UncontrolledAlert>
                     :null}
@@ -372,7 +452,7 @@ class Users extends Component{
                                         Edit
                                     </Button>
                                     <Button 
-                                        className={this.state.showDeleteBtn ? "":"d-none"} 
+                                        className={this.state.showDeleteBtn ? "ml-2":"d-none"} 
                                         color="primary" 
                                         size="sm" 
                                         onClick={this.toggleDeleteModal}>
@@ -393,26 +473,32 @@ class Users extends Component{
                         </Alert>
                     :null}
                     <div className="">
-                        <DataTable 
-                            loading={this.state.loading}
-                            selectedRows={this.state.selectedRows} 
-                            selectAll={this.state.selectAllRows}
-                            onSelectRow = {this.onSelectRow}
-                            onSelectAll={this.selectAll} 
-                            onSearch = {this.onSearchSubmit}
-                            columns = {this.state.columns} 
-                            rows={this.state.items}
-                            perPage={this.state.perPage}
-                            perPageValues = {this.state.perPageValues}
-                            onPerPageChange={this.showPerPage}
-                            total={this.state.total}
-                            currentPage={this.state.currentPage}
-                            lastPage={this.state.lastPage}
-                            onSort={this.onSort}
-                            sortBy={this.state.sortBy}
-                            sortDirection={this.state.sortDirection}
-                            page="/users"
+                        {this.state.items.length ? 
+                            <DataTable 
+                                loading={this.state.loading}
+                                selectedRows={this.state.selectedRows} 
+                                selectAll={this.state.selectAllRows}
+                                onSelectRow = {this.onSelectRow}
+                                onSelectAll={this.selectAll} 
+                                onSearch = {this.onSearchSubmit}
+                                columns = {this.state.columns} 
+                                rows={this.state.items}
+                                perPage={this.state.perPage}
+                                perPageValues = {this.state.perPageValues}
+                                onPerPageChange={this.showPerPage}
+                                total={this.state.total}
+                                currentPage={this.state.currentPage}
+                                lastPage={this.state.lastPage}
+                                onSort={this.onSort}
+                                sortBy={this.state.sortBy}
+                                sortDirection={this.state.sortDirection}
+                                page="/users"
                             />
+                        :
+                            <Row className="m-0">
+                                <Col xs="12" className="p-3 border bg-light d-flex align-items-center">You have no records. <Button color="primary" size="sm" className="ml-auto" onClick={this.toggleCreateModal}>Create User</Button></Col>
+                            </Row>
+                        }
                     </div>
                 </Container>
                 <UserCreateModal 
@@ -428,6 +514,16 @@ class Users extends Component{
                     isOpen={this.state.editModalOpen}
                     toggle={this.toggleEditModal}
                     onSubmit={this.update}
+                />
+                 <UserDeleteModal 
+                    isOpen={this.state.deleteModalOpen}
+                    toggle={this.toggleDeleteModal}
+                    onClick={this.delete}
+                />
+                 <UserDeleteModal 
+                    isOpen={this.state.deleteSelectedModalOpen}
+                    toggle={this.toggleDeleteSelectedModal}
+                    onClick={this.deleteAll}
                 />
             </Page>
             

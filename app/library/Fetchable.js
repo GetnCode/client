@@ -5,12 +5,20 @@ export default class Fetchable{
         this.baseUrl = baseUrl;
     }
 
-    async get(url = '') {
+    async get(url = '', token) {
+        if(url.includes("?")){
+            url += "&api_token=" + token;
+        }
+
+        else{
+            url += "?api_token=" + token;
+        }
         const response = await fetch(this.baseUrl + url);
+
         return await response.json(); // parses JSON response into native JavaScript objects
     }
 
-    async post(url = '', data = {}) {
+    async post(url = '', data = {}, token) {
         // Default options are marked with *
         const response = await fetch(this.baseUrl + url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -18,7 +26,9 @@ export default class Fetchable{
         cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
         credentials: 'same-origin', // include, *same-origin, omit
         headers: {
-            'Content-Type': 'application/json'
+            'Authorization': 'Bearer '.  token,
+            'Content-Type': 'application/json',
+            'Accept':'application/json',
             // 'Content-Type': 'application/x-www-form-urlencoded',
         },
         redirect: 'follow', // manual, *follow, error

@@ -17,6 +17,7 @@ import Settings from "./pages/Settings";
 import Users from "./pages/Users";
 import Login from "./pages/Login";
 import AuthModel from "./objects/AuthModel";
+import UserModel from "./objects/User";
 
 class App extends React.Component{
 
@@ -25,29 +26,37 @@ class App extends React.Component{
 
         this.state = {
             user:{},
-            isAuthorized:false
+            isAuthorized:false,
+            loading:true,
         };
 
         this.setUser = this.setUser.bind(this);
-        console.log(this.state);
     }
 
+
     componentDidMount(){
-        if(this.state.user.token !== undefined){
-            var am = new AuthModel();
-            am.isAuthorized(this.state.user.token).then(authed => {
+        if( sessionStorage.getItem('token') === null){
+            this.props.history.push("/login");
+        }
+        else{
+            var um = new UserModel();
+            um.getById(
+                sessionStorage.getItem('id'), 
+                sessionStorage.getItem('token')
+            ).then(response => {
                 this.setState({
-                    isAuthorized:authed[0]
+                    user:response,
+                    isAuthorized:true,
                 });
             });
         }
-      
     }
 
+
     setUser(user){
-        console.log("settings user");
-        console.log(user);
-        this.setState({user:user});
+        sessionStorage.setItem('token', user.token);
+        sessionStorage.setItem('id', user.id);
+        this.setState({user:user, isAuthorized:true});
     }
 
     render(){

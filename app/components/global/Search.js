@@ -50,10 +50,10 @@ class Search extends React.Component{
     render(){
         return(
             <Form className="col row m-0 p-0" onSubmit={this.onSubmit}>
-                <Input bsSize="sm" className="col mr-1 " type="search" name="search" onChange={this.onChange} value={this.state.term} placeholder="Search..." />
+                <Input className="col mr-1 " type="search" name="search" onChange={this.onChange} value={this.state.term} placeholder="Search..." />
                 {!this.state.searched ?
-                    <Button size="sm" className="px-2" color="primary" type="submit"><i className="fa fas fa-search"></i></Button>
-                :<Button  size="sm" onClick={this.clearSearch} className="px-2" color="primary" type="button"><i className="fa fas fa-times"></i></Button>}
+                    <Button  className="px-3" color="primary" type="submit"><i className="fa fas fa-search"></i></Button>
+                :<Button  onClick={this.clearSearch} className="px-3" color="primary" type="button"><i className="fa fas fa-times"></i></Button>}
             </Form>
         );
     }

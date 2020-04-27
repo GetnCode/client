@@ -15,7 +15,8 @@ import {
   Container,
   Button
 } from 'reactstrap';
-import MenuDropdown from '../menu/MenuDropdown'
+import MenuDropdown from '../menu/MenuDropdown';
+import UserDropdown from '../menu/UserDropdown'
 
 export default
 class Header extends React.Component{
@@ -29,6 +30,9 @@ class Header extends React.Component{
                         <NavbarBrand href="/" className="text-white font-weight-bold ml-3">
                             code<span className="">me</span>
                         </NavbarBrand>
+                        {this.props.user !== undefined ?
+                            <UserDropdown match={this.props.match} className="ml-auto" username={this.props.user.username}/>
+                        :null}
                     </Container>
 
                 </Navbar>

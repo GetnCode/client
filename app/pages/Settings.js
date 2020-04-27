@@ -28,12 +28,12 @@ class Settings extends Component{
     render(){
         return(
             <div className="bg-img h-100">
-                <PageNav match={this.props.match}/>
+                 <PageNav match={this.props.match} user={this.props.user}/>
                 <div style={{height:"calc(100% - 60px)", overflow:"auto"}}>
-                    <Container className="my-4 bg-light-gradient shadow-sharpe p-5">
-                        <Row className="m-0 mb-4">
-                            <Link className="btn btn-primary btn-sm mr-3" to="/">Back</Link>
-                            <PageTitle title="Settings" />
+                    <Container className="my-4 bg-light-gradient rounded-lg shadow-sharpe p-5">
+                        <Row className="m-0 mb-4 align-items-center">
+                            <Link className="btn btn-primary btn-sm mr-3" to="/"><i className="fa fas fa-angle-left mr-1"></i> Back</Link>
+                            <PageTitle title="Settings" description="Configure and set user, roles, views configuration & more" />
                            
                         </Row>
                         <Row className="m-0 align-items-center   mt-4">

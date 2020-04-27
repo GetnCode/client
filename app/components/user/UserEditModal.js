@@ -20,13 +20,12 @@ class UserEditModal extends React.Component{
     render(){
         return( 
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle}>
-                <ModalBody className="bg-white p-5 shadow">
+                <ModalBody className="bg-white rounded p-5 shadow">
                     <div className=" row m-0 align-items-center  mb-4">
                         <h5 className="font-weight-bold mb-0 text-primary">Edit User</h5>
                         <Button color="secondary" className="ml-auto" size="sm" onClick={this.props.toggle}><i className="fa fas fa-times"></i></Button>
                     </div>
                     <UserForm 
-                        btnLabel="Edit User"
                         permission={this.props.permission} 
                         username={this.props.username} 
                         email={this.props.email} 
